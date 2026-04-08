@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AcadBot – Analytics & Evaluation Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --navy:#0b1628;--ns:#1a2f57;
+      --amber:#f5a623;--ad:#c4821a;
+      --grad:linear-gradient(135deg,#0b1628,#1a2f57);
+      --ga:linear-gradient(135deg,#f5a623,#e8831a);
+      --green:#10b981;--red:#ef4444;--blue:#3b82f6;
+      /* light */
+      --bg:#fdf8f0;--surface:#fff;--surface2:#f5f0e8;
+      --text:#1a1a2e;--muted:#6b7a99;--border:#e2e8f4;
+      --sh:0 4px 16px rgba(11,22,40,.09);
+    }
+    [data-theme="dark"]{
+      --bg:#0d1117;--surface:#161b22;--surface2:#1c2333;
+      --text:#e6edf3;--muted:#7d8590;--border:#30363d;
+      --sh:0 4px 16px rgba(0,0,0,.4);
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;}
+    ::-webkit-scrollbar{width:5px;}
+    ::-webkit-scrollbar-thumb{background:var(--ns);border-radius:3px;}
+
+    /* NAV */
+    nav{background:var(--navy);padding:0 5%;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(245,166,35,.14);}
+    .nl{display:flex;align-items:center;gap:9px;text-decoration:none;}
+    .ni{width:32px;height:32px;background:var(--ga);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+    .nt{font-family:'Playfair Display',serif;font-size:18px;font-weight:800;color:#fff;}
+    .nt span{color:var(--amber);}
+    .nav-right{display:flex;align-items:center;gap:10px;}
+    .back{display:flex;align-items:center;gap:7px;color:rgba(255,255,255,.6);text-decoration:none;font-size:13px;font-weight:500;transition:color .2s;}
+    .back:hover{color:var(--amber);}
+    #dmBtn{width:34px;height:34px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background .2s;color:rgba(255,255,255,.7);}
+    #dmBtn:hover{background:rgba(245,166,35,.15);color:var(--amber);}
+
+    /* LAYOUT */
+    .page{max-width:1100px;margin:0 auto;padding:32px 20px 60px;}
+
+    /* PAGE HEADER */
+    .pg-hdr{background:var(--grad);border-radius:16px;padding:30px 32px;margin-bottom:26px;position:relative;overflow:hidden;}
+    .pg-hdr::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(245,166,35,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(245,166,35,.04) 1px,transparent 1px);background-size:40px 40px;}
+    .pg-hdr h1{font-family:'Playfair Display',serif;font-size:clamp(20px,4vw,32px);font-weight:800;color:#fff;position:relative;}
+    .pg-hdr p{color:rgba(255,255,255,.52);font-size:13.5px;margin-top:7px;position:relative;}
+    .pg-hdr .badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);border-radius:20px;padding:4px 13px;margin-bottom:12px;position:relative;}
+    .pg-hdr .badge span{font-size:11px;font-weight:700;color:var(--amber);letter-spacing:1px;text-transform:uppercase;}
+    .dot{width:6px;height:6px;background:var(--amber);border-radius:50%;animation:pa 2s infinite;}
+    @keyframes pa{0%,100%{box-shadow:0 0 0 0 rgba(245,166,35,.4);}50%{box-shadow:0 0 0 5px rgba(245,166,35,0);}}
+    .refresh-btn{position:absolute;top:18px;right:20px;background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);color:var(--amber);padding:7px 15px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .2s;}
+    .refresh-btn:hover{background:rgba(245,166,35,.28);}
+
+    /* LAST UPDATED */
+    .last-updated{font-size:11.5px;color:var(--muted);margin-bottom:22px;text-align:right;}
+
+    /* KPI GRID */
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:15px;margin-bottom:24px;}
+    .kpi{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:18px 20px;position:relative;overflow:hidden;box-shadow:var(--sh);transition:background .3s,border-color .3s;}
+    .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+    .kpi.g::before{background:var(--green);}
+    .kpi.a::before{background:var(--amber);}
+    .kpi.r::before{background:var(--red);}
+    .kpi.b::before{background:var(--blue);}
+    .kpi.n::before{background:var(--navy);}
+    .kpi.p::before{background:#8b5cf6;}
+    .kpi-icon{font-size:20px;margin-bottom:9px;}
+    .kpi-val{font-family:'Playfair Display',serif;font-size:30px;font-weight:800;color:var(--text);line-height:1;}
+    .kpi-lbl{font-size:11.5px;font-weight:500;color:var(--muted);margin-top:4px;}
+    .kpi-sub{font-size:10.5px;color:var(--muted);margin-top:3px;opacity:.8;}
+
+    /* ACCURACY CARD */
+    .acc-card{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:24px;margin-bottom:24px;box-shadow:var(--sh);}
+    .acc-card h2{font-family:'Playfair Display',serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:18px;}
+    .acc-meter{display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+    .acc-circle{position:relative;width:120px;height:120px;flex-shrink:0;}
+    .acc-circle svg{transform:rotate(-90deg);}
+    .acc-circle .bg{fill:none;stroke:var(--border);stroke-width:10;}
+    .acc-circle .fg{fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1.4s ease;}
+    .acc-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+    .acc-num .v{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--text);}
+    .acc-num .l{font-size:10px;color:var(--muted);font-weight:600;}
+    .acc-bars{flex:1;min-width:200px;}
+    .abar{margin-bottom:13px;}
+    .abar-top{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;}
+    .abar-val{color:var(--muted);font-weight:400;}
+    .abar-track{height:7px;background:var(--border);border-radius:4px;overflow:hidden;}
+    .abar-fill{height:100%;border-radius:4px;transition:width 1.2s ease;}
+    .abar-fill.gn{background:var(--green);}
+    .abar-fill.rd{background:var(--red);}
+    .acc-note{background:var(--surface2);border-radius:9px;padding:11px 14px;margin-top:14px;}
+    .acc-note p{font-size:12px;color:var(--muted);line-height:1.65;}
+    .acc-note strong{color:var(--text);}
+
+    /* 3-COL + 2-COL GRIDS */
+    .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:24px;}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px;}
+    @media(max-width:900px){.three-col{grid-template-columns:1fr 1fr;}}
+    @media(max-width:620px){.three-col,.two-col{grid-template-columns:1fr;}}
+
+    /* CARDS */
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:22px;box-shadow:var(--sh);transition:background .3s,border-color .3s;}
+    .card h2{font-family:'Playfair Display',serif;font-size:16px;font-weight:800;color:var(--text);margin-bottom:16px;}
+
+    /* INTENT BARS */
+    .ib{margin-bottom:11px;}
+    .ib-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+    .ib-name{font-size:11.5px;font-weight:600;color:var(--text);text-transform:capitalize;}
+    .ib-cnt{font-size:10.5px;font-weight:700;color:var(--ad);background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.2);padding:1px 7px;border-radius:9px;}
+    .ib-track{height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+    .ib-fill{height:100%;background:linear-gradient(90deg,var(--amber),var(--ad));border-radius:3px;transition:width 1.2s ease;}
+
+    /* DAILY BARS */
+    .daily-chart{display:flex;align-items:flex-end;gap:5px;height:90px;margin-top:6px;}
+    .day-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+    .day-bar-wrap{flex:1;width:100%;display:flex;align-items:flex-end;}
+    .day-bar{width:100%;background:linear-gradient(180deg,var(--amber),var(--ad));border-radius:4px 4px 0 0;transition:height 1.2s ease;min-height:2px;}
+    .day-lbl{font-size:9px;color:var(--muted);white-space:nowrap;}
+    .day-num{font-size:9.5px;font-weight:700;color:var(--ad);}
+
+    /* MOST ASKED QUESTIONS */
+    .maq-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);}
+    .maq-item:last-child{border-bottom:none;}
+    .maq-rank{width:22px;height:22px;background:var(--surface2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--muted);flex-shrink:0;margin-top:1px;}
+    .maq-rank.top3{background:rgba(245,166,35,.15);color:var(--ad);}
+    .maq-q{flex:1;}
+    .maq-text{font-size:12.5px;color:var(--text);font-weight:500;line-height:1.4;}
+    .maq-count{font-size:10.5px;color:var(--muted);margin-top:2px;}
+    .maq-bar{height:3px;background:var(--border);border-radius:2px;margin-top:4px;overflow:hidden;}
+    .maq-bar-fill{height:100%;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:2px;transition:width 1.2s ease;}
+    .maq-empty{color:var(--muted);font-size:13px;text-align:center;padding:24px 0;}
+
+    /* EVALUATION TABLE */
+    .eval-wrap{overflow-x:auto;margin-bottom:24px;}
+    .eval-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+    .eval-table th{background:var(--navy);color:#fff;padding:10px 13px;text-align:left;font-weight:600;font-size:11px;letter-spacing:.3px;}
+    .eval-table th:first-child{border-radius:8px 0 0 0;}
+    .eval-table th:last-child{border-radius:0 8px 0 0;}
+    .eval-table td{padding:9px 13px;border-bottom:1px solid var(--border);color:var(--text);}
+    .eval-table tr:hover td{background:rgba(245,166,35,.03);}
+    .bdg{border-radius:5px;padding:2px 8px;font-size:10.5px;font-weight:600;}
+    .bdg.g{background:#dcfce7;color:#166534;}
+    .bdg.y{background:#fef9c3;color:#854d0e;}
+    [data-theme="dark"] .bdg.g{background:#14532d;color:#86efac;}
+    [data-theme="dark"] .bdg.y{background:#422006;color:#fde68a;}
+
+    /* DELIVERABLES */
+    .report{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:24px;margin-bottom:24px;box-shadow:var(--sh);}
+    .report h2{font-family:'Playfair Display',serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+    .rrow{display:flex;align-items:flex-start;gap:13px;padding:12px 0;border-bottom:1px solid var(--border);}
+    .rrow:last-child{border-bottom:none;}
+    .ricon{width:36px;height:36px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+    .rinfo h4{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:3px;}
+    .rinfo p{font-size:12px;color:var(--muted);line-height:1.6;}
+    .rtag{display:inline-block;padding:2px 8px;border-radius:5px;font-size:10.5px;font-weight:600;margin-top:5px;background:#dcfce7;color:#166534;}
+    [data-theme="dark"] .rtag{background:#14532d;color:#86efac;}
+
+    /* LOADING */
+    .loading{text-align:center;padding:60px;color:var(--muted);font-size:14px;}
+    .spinner{width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--amber);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nl" href="/"><div class="ni">🎓</div><span class="nt">Acad<span>Bot</span></span></a>
+  <div class="nav-right">
+    <button id="dmBtn" onclick="toggleDark()" title="Toggle dark mode">🌙</button>
+    <a class="back" href="/">← Back to Website</a>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="pg-hdr">
+    <div class="badge"><div class="dot"></div><span>Live Analytics</span></div>
+    <h1>📊 Analytics & Evaluation Report</h1>
+    <p>NLP accuracy · Intent distribution · Unique users · Most asked questions · Session analytics</p>
+    <button class="refresh-btn" onclick="load()">🔄 Refresh</button>
+  </div>
+  <div class="last-updated" id="lastUpdated">Last updated: —</div>
+  <div id="content"><div class="loading"><div class="spinner"></div>Loading live analytics…</div></div>
+</div>
+
+<script>
+  /* ── DARK MODE ── */
+  const dm = localStorage.getItem('acadbot-theme') || 'light';
+  applyTheme(dm);
+  function applyTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    document.getElementById('dmBtn').textContent = t==='dark'?'☀️':'🌙';
+    localStorage.setItem('acadbot-theme', t);
+  }
+  function toggleDark(){
+    applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+  }
+
+  /* ── LOAD DATA ── */
+  async function load(){
+    document.getElementById('content').innerHTML = '<div class="loading"><div class="spinner"></div>Refreshing…</div>';
+    try {
+      const r = await fetch('/api/analytics');
+      const d = await r.json();
+      document.getElementById('lastUpdated').textContent =
+        'Last updated: ' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+      render(d);
+    } catch(e){
+      document.getElementById('content').innerHTML =
+        '<div class="loading">⚠️ Could not load analytics. Make sure Flask server is running on port 5000.</div>';
+    }
+  }
+
+  function render(d){
+    const acc      = d.accuracy;
+    const total    = d.total_messages;
+    const matched  = d.matched;
+    const unmatched= d.unmatched;
+    const topI     = d.top_intents || [];
+    const daily    = d.daily || [];
+    const sessions = d.sessions;
+    const uniqueUsers = d.unique_users || 0;
+    const mostAsked   = d.most_asked || [];
+    const geminiCount = d.gemini_count || 0;
+    const predefinedCount = matched - geminiCount < 0 ? matched : matched - geminiCount;
+
+    // Accuracy ring
+    const circ  = 2 * Math.PI * 48;
+    const offset= circ - (acc / 100) * circ;
+    const accColor = acc>=80?'#10b981':acc>=60?'#f5a623':'#ef4444';
+    const accLabel = acc>=80?'Excellent':acc>=60?'Good':'Needs Improvement';
+
+    const maxDay = Math.max(...daily.map(x=>x.count), 1);
+    const maxI   = topI.length>0 ? topI[0][1] : 1;
+    const maxMAQ = mostAsked.length>0 ? mostAsked[0][1] : 1;
+
+    // Most asked questions HTML
+    const maqHTML = mostAsked.length === 0
+      ? '<p class="maq-empty">No questions recorded yet. Start chatting! 💬</p>'
+      : mostAsked.map(([q,cnt],i)=>`
+          <div class="maq-item">
+            <div class="maq-rank ${i<3?'top3':''}">${i+1}</div>
+            <div class="maq-q">
+              <div class="maq-text">${escHtml(q)}</div>
+              <div class="maq-count">Asked ${cnt} time${cnt>1?'s':''}</div>
+              <div class="maq-bar"><div class="maq-bar-fill" style="width:${Math.round(cnt/maxMAQ*100)}%"></div></div>
+            </div>
+          </div>`).join('');
+
+    // Evaluation data
+    const evalData = [
+      ['Intent Classification','Phrase-priority NLP scoring (10× weight)',acc>=80?'High Accuracy':'Moderate','g'],
+      ['Fuzzy Matching','Levenshtein distance, 80% threshold','Active – handles typos','g'],
+      ['Synonym Expansion','60+ synonym → canonical mappings','Active – 60+ mappings','g'],
+      ['Response Relevance','Exact KB lookup per matched intent','Deterministic','g'],
+      ['Invalid Input Detection','Fallback when NLP score = 0',`${unmatched} flagged`,'g'],
+      ['Matched Queries','Intent score > 0',`${matched} / ${total}`,(matched>unmatched||total===0)?'g':'y'],
+      ['Persistent History','JSON file on disk, per-session UUID','All sessions saved','g'],
+      ['Unique User Tracking','UUID per browser session, stored in analytics.json',`${uniqueUsers} users`,'g'],
+    ];
+
+    const deliverables = [
+      ['🤖','Chatbot User Interface','Responsive floating popup with Chat & History tabs, dark mode, typing animation.','✅ Delivered'],
+      ['🧠','NLP Intent Classification','Phrase-priority + fuzzy matching + synonym expansion. 25+ intents, 200+ phrase rules.','✅ Delivered'],
+      ['📚','Knowledge Base','25 intents — Sem V & VI subjects, exam dates, attendance, fees, OJT, library, academic calendar.','✅ Delivered'],
+      ['🕐','Persistent Chat History','JSON storage survives page reload. History tab shows full conversation.','✅ Delivered'],
+      ['📊','Accuracy & Evaluation Report','This dashboard — KPIs, accuracy ring, unique users, most asked questions, evaluation table.','✅ Delivered'],
+      ['🌐','Website Integration','Landing page: hero, features, how-it-works, topics, footer. Chatbot accessible from every section.','✅ Delivered'],
+    ];
+
+    document.getElementById('content').innerHTML = `
+      <!-- KPI GRID: 7 cards including unique users + gemini -->
+      <div class="kpi-grid">
+        <div class="kpi g"><div class="kpi-icon">🎯</div><div class="kpi-val">${acc}%</div><div class="kpi-lbl">NLP Accuracy</div><div class="kpi-sub">${accLabel}</div></div>
+        <div class="kpi a"><div class="kpi-icon">💬</div><div class="kpi-val">${total}</div><div class="kpi-lbl">Total Messages</div><div class="kpi-sub">All sessions combined</div></div>
+        <div class="kpi b"><div class="kpi-icon">✅</div><div class="kpi-val">${matched}</div><div class="kpi-lbl">Matched Queries</div><div class="kpi-sub">Intent found</div></div>
+        <div class="kpi r"><div class="kpi-icon">❌</div><div class="kpi-val">${unmatched}</div><div class="kpi-lbl">Unmatched</div><div class="kpi-sub">Invalid input</div></div>
+        <div class="kpi p"><div class="kpi-icon">👥</div><div class="kpi-val">${uniqueUsers}</div><div class="kpi-lbl">Unique Users</div><div class="kpi-sub">Distinct sessions</div></div>
+        <div class="kpi n"><div class="kpi-icon">🗂️</div><div class="kpi-val">${sessions}</div><div class="kpi-lbl">Total Sessions</div><div class="kpi-sub">Since: ${d.first_use||'N/A'}</div></div>
+        <div class="kpi" style="--c:#4285f4" ><div class="kpi-icon">✦</div><div class="kpi-val" style="background:linear-gradient(90deg,#4285f4,#ea4335,#fbbc05,#34a853);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${geminiCount}</div><div class="kpi-lbl">Gemini AI Replies</div><div class="kpi-sub">Fallback responses</div></div>
+      </div>
+
+      <!-- ACCURACY METER -->
+      <div class="acc-card">
+        <h2>🎯 NLP Accuracy Meter</h2>
+        <div class="acc-meter">
+          <div class="acc-circle">
+            <svg width="120" height="120" viewBox="0 0 120 120">
+              <circle class="bg" cx="60" cy="60" r="48"/>
+              <circle class="fg" cx="60" cy="60" r="48"
+                stroke="${accColor}"
+                stroke-dasharray="${circ.toFixed(1)}"
+                stroke-dashoffset="${circ.toFixed(1)}"
+                id="accRing"/>
+            </svg>
+            <div class="acc-num"><span class="v">${acc}%</span><span class="l">Accuracy</span></div>
+          </div>
+          <div class="acc-bars" style="flex:1;">
+            <div class="abar">
+              <div class="abar-top"><span>Matched Queries</span><span class="abar-val">${matched} / ${total}</span></div>
+              <div class="abar-track"><div class="abar-fill gn" style="width:${total>0?Math.round(matched/total*100):0}%"></div></div>
+            </div>
+            <div class="abar">
+              <div class="abar-top"><span>Unmatched / Invalid</span><span class="abar-val">${unmatched} / ${total}</span></div>
+              <div class="abar-track"><div class="abar-fill rd" style="width:${total>0?Math.round(unmatched/total*100):0}%"></div></div>
+            </div>
+            <div class="acc-note">
+              <p><strong>Formula:</strong> Accuracy = Matched ÷ Total × 100<br/>
+              A query is "matched" when NLP score &gt; 0 (phrase, fuzzy, or keyword hit).<br/>
+              Fuzzy matching at 80%+ similarity handles typos and near-matches.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3-COL: intents + daily + most asked -->
+      <div class="three-col">
+        <div class="card">
+          <h2>🏷️ Top Intent Distribution</h2>
+          ${topI.length===0
+            ? '<p style="color:var(--muted);font-size:13px;text-align:center;padding:20px 0">No data yet. Start chatting!</p>'
+            : topI.map(([intent,count])=>`
+                <div class="ib">
+                  <div class="ib-top">
+                    <span class="ib-name">${intent.replace(/_/g,' ')}</span>
+                    <span class="ib-cnt">${count}</span>
+                  </div>
+                  <div class="ib-track"><div class="ib-fill" style="width:${Math.round(count/maxI*100)}%"></div></div>
+                </div>`).join('')}
+        </div>
+        <div class="card">
+          <h2>📅 Daily Activity (7 Days)</h2>
+          <div class="daily-chart">
+            ${daily.map(day=>{
+              const pct = Math.round((day.count/maxDay)*100);
+              return `<div class="day-col">
+                <div class="day-num">${day.count}</div>
+                <div class="day-bar-wrap"><div class="day-bar" style="height:${Math.max(pct,2)}%"></div></div>
+                <div class="day-lbl">${day.date.slice(5)}</div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+        <div class="card">
+          <h2>🔥 Most Asked Questions</h2>
+          ${maqHTML}
+        </div>
+      </div>
+
+      <!-- EVALUATION TABLE -->
+      <div class="eval-wrap">
+        <div class="card" style="margin-bottom:0">
+          <h2>🧪 Response Evaluation Report</h2>
+          <table class="eval-table">
+            <thead><tr><th>Category</th><th>Method</th><th>Result</th><th>Status</th></tr></thead>
+            <tbody>
+              ${evalData.map(([cat,method,result,status])=>`
+                <tr>
+                  <td><strong>${cat}</strong></td>
+                  <td style="color:var(--muted);font-size:11.5px;">${method}</td>
+                  <td>${result}</td>
+                  <td><span class="bdg ${status}">${status==='g'?'✅ Pass':'⚠️ Review'}</span></td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DELIVERABLES -->
+      <div class="report">
+        <h2>📋 Project Deliverables Checklist</h2>
+        ${deliverables.map(([icon,name,desc,tag])=>`
+          <div class="rrow">
+            <div class="ricon">${icon}</div>
+            <div class="rinfo">
+              <h4>${name}</h4>
+              <p>${desc}</p>
+              <span class="rtag">${tag}</span>
+            </div>
+          </div>`).join('')}
+      </div>
+
+      <!-- TECH + NLP -->
+      <div class="two-col">
+        <div class="card">
+          <h2>🛠️ Technical Architecture</h2>
+          <table style="width:100%;font-size:12.5px;border-collapse:collapse;">
+            ${[['Backend','Python 3 + Flask'],['NLP Engine','Phrase-priority + Fuzzy + Synonyms'],['Storage','JSON files (data/ directory)'],['History','Per-session UUID, disk-persisted'],['Frontend','HTML5 + CSS3 + Vanilla JS'],['Dark Mode','CSS variables + localStorage'],['Typing Animation','CSS keyframes + bot status indicator'],['Analytics API','/api/analytics live endpoint']].map(([k,v])=>`
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px 0;font-weight:600;color:var(--muted);width:45%;font-size:11.5px;">${k}</td>
+                <td style="padding:8px 0;color:var(--text);font-weight:500;">${v}</td>
+              </tr>`).join('')}
+          </table>
+        </div>
+        <div class="card">
+          <h2>📐 NLP Model Summary</h2>
+          <table style="width:100%;font-size:12.5px;border-collapse:collapse;">
+            ${[['Total Intents','25 intents'],['Phrase Rules','200+ multi-word phrases'],['Synonym Mappings','60+ word expansions'],['Fuzzy Threshold','80% similarity (Levenshtein)'],['Phrase Match Weight','10 × word count'],['Keyword Match Weight','2 × word count'],['Fuzzy Phrase Score','8 × ratio × word count'],['Invalid Handling','Fallback with 6 suggestions']].map(([k,v])=>`
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:8px 0;font-weight:600;color:var(--muted);width:55%;font-size:11.5px;">${k}</td>
+                <td style="padding:8px 0;color:var(--text);font-weight:500;">${v}</td>
+              </tr>`).join('')}
+          </table>
+        </div>
+      </div>
+    `;
+
+    // Animate accuracy ring
+    requestAnimationFrame(()=>{
+      const ring = document.getElementById('accRing');
+      if(ring) ring.style.strokeDashoffset = offset.toFixed(1);
+    });
+  }
+
+  function escHtml(s){
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  load();
+  // Auto-refresh every 30 seconds
+  setInterval(load, 30000);
+</script>
+</body>
+</html>

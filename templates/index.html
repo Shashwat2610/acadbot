@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AcadBot – AI Academic Assistant | KES' Shroff College</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* ═══════════════════════════════════════════
+       DESIGN TOKENS — light & dark
+    ═══════════════════════════════════════════ */
+    :root {
+      --navy:       #0b1628;
+      --navy-soft:  #1a2f57;
+      --amber:      #f5a623;
+      --amber-dim:  #c4821a;
+      --grad:       linear-gradient(135deg,#0b1628,#1a2f57);
+      --grad-a:     linear-gradient(135deg,#f5a623,#e8831a);
+      /* light mode surfaces */
+      --bg:         #fdf8f0;
+      --surface:    #ffffff;
+      --surface2:   #f5f0e8;
+      --text:       #1a1a2e;
+      --muted:      #6b7a99;
+      --border:     #e2e8f4;
+      --sh:         0 4px 16px rgba(11,22,40,.09);
+      --sh-xl:      0 24px 64px rgba(11,22,40,.2);
+      /* chat bubble colors */
+      --bub-bot-bg: #f5f0e8;
+      --bub-bot-border: #e2e8f4;
+      --bub-bot-text:   #1a1a2e;
+      --bub-user-bg:    #0b1628;
+      --bub-user-text:  rgba(255,255,255,.9);
+      --inp-bg:     #f5f0e8;
+    }
+    [data-theme="dark"] {
+      --bg:         #0d1117;
+      --surface:    #161b22;
+      --surface2:   #1c2333;
+      --text:       #e6edf3;
+      --muted:      #7d8590;
+      --border:     #30363d;
+      --sh:         0 4px 16px rgba(0,0,0,.4);
+      --sh-xl:      0 24px 64px rgba(0,0,0,.6);
+      --bub-bot-bg: #1c2333;
+      --bub-bot-border: #30363d;
+      --bub-bot-text:   #e6edf3;
+      --bub-user-bg:    #1f3a6e;
+      --bub-user-text:  #e6edf3;
+      --inp-bg:     #1c2333;
+    }
+
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;transition:background .3s,color .3s;}
+    ::-webkit-scrollbar{width:5px;}
+    ::-webkit-scrollbar-thumb{background:var(--navy-soft);border-radius:3px;}
+    [data-theme="dark"] ::-webkit-scrollbar-thumb{background:var(--border);}
+
+    /* ── NAVBAR ─────────────────────────────── */
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:66px;background:rgba(11,22,40,.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(245,166,35,.14);transition:box-shadow .3s;}
+    nav.scrolled{box-shadow:0 4px 24px rgba(0,0,0,.3);}
+    .nl{display:flex;align-items:center;gap:10px;text-decoration:none;}
+    .ni{width:34px;height:34px;background:var(--grad-a);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;}
+    .nt{font-family:'Playfair Display',serif;font-size:19px;font-weight:800;color:#fff;}
+    .nt span{color:var(--amber);}
+    .nav-links{display:flex;align-items:center;gap:22px;list-style:none;}
+    .nav-links a{color:rgba(255,255,255,.62);text-decoration:none;font-size:13.5px;font-weight:500;transition:color .2s;}
+    .nav-links a:hover{color:var(--amber);}
+    .ncta{background:var(--grad-a)!important;color:var(--navy)!important;padding:8px 18px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;border:none;font-family:inherit;}
+    /* Dark mode toggle in nav */
+    #dmToggle{
+      width:38px;height:38px;background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:9px;cursor:pointer;font-size:17px;
+      display:flex;align-items:center;justify-content:center;
+      transition:background .2s,border-color .2s;color:rgba(255,255,255,.7);
+    }
+    #dmToggle:hover{background:rgba(245,166,35,.15);border-color:rgba(245,166,35,.3);color:var(--amber);}
+    @media(max-width:680px){.nav-links li:not(:last-child):not(:nth-last-child(2)){display:none;}}
+
+    /* ── HERO ───────────────────────────────── */
+    .hero{min-height:100vh;background:var(--grad);display:flex;align-items:center;position:relative;overflow:hidden;padding:100px 5% 60px;}
+    .hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(245,166,35,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(245,166,35,.04) 1px,transparent 1px);background-size:60px 60px;}
+    .orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;}
+    .orb-1{width:480px;height:480px;background:rgba(245,166,35,.12);top:-140px;right:-90px;animation:fl 9s ease-in-out infinite;}
+    .orb-2{width:320px;height:320px;background:rgba(26,47,87,.5);bottom:-80px;left:-70px;animation:fl 12s ease-in-out infinite reverse;}
+    @keyframes fl{0%,100%{transform:translate(0,0);}50%{transform:translate(18px,-26px);}}
+    .hi{display:flex;align-items:center;justify-content:space-between;width:100%;gap:40px;position:relative;z-index:2;}
+    .hc{max-width:580px;}
+    .hbadge{display:inline-flex;align-items:center;gap:8px;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.3);border-radius:20px;padding:6px 15px;margin-bottom:24px;animation:fu .6s ease both;}
+    .hbadge .dot{width:7px;height:7px;background:var(--amber);border-radius:50%;animation:pa 2s infinite;}
+    @keyframes pa{0%,100%{box-shadow:0 0 0 0 rgba(245,166,35,.4);}50%{box-shadow:0 0 0 5px rgba(245,166,35,0);}}
+    .hbadge span{font-size:11px;font-weight:700;color:var(--amber);letter-spacing:1px;text-transform:uppercase;}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(36px,6vw,64px);font-weight:900;color:#fff;line-height:1.08;letter-spacing:-1.5px;margin-bottom:20px;animation:fu .6s .1s ease both;}
+    .hero h1 em{font-style:normal;color:var(--amber);}
+    .hero-sub{font-size:15.5px;color:rgba(255,255,255,.6);line-height:1.75;max-width:460px;margin-bottom:36px;animation:fu .6s .2s ease both;}
+    .hacts{display:flex;gap:12px;flex-wrap:wrap;animation:fu .6s .3s ease both;}
+    .btn-p{display:inline-flex;align-items:center;gap:8px;background:var(--grad-a);color:var(--navy);font-weight:700;font-size:14.5px;padding:12px 24px;border-radius:10px;text-decoration:none;transition:transform .2s,box-shadow .2s;box-shadow:0 8px 22px rgba(245,166,35,.35);cursor:pointer;border:none;font-family:inherit;}
+    .btn-p:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(245,166,35,.42);}
+    .btn-o{display:inline-flex;align-items:center;gap:8px;background:transparent;color:#fff;font-weight:600;font-size:14.5px;padding:11px 22px;border-radius:10px;text-decoration:none;border:1.5px solid rgba(255,255,255,.25);transition:border-color .2s,background .2s;}
+    .btn-o:hover{border-color:var(--amber);background:rgba(245,166,35,.06);}
+    .hstats{display:flex;flex-direction:column;gap:13px;animation:fu .6s .4s ease both;}
+    @media(max-width:880px){.hstats{display:none;}}
+    .sc{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:18px 26px;text-align:center;backdrop-filter:blur(8px);min-width:140px;}
+    .sc .num{font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--amber);}
+    .sc .lbl{font-size:11px;font-weight:500;color:rgba(255,255,255,.4);letter-spacing:.5px;margin-top:3px;}
+    @keyframes fu{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+    /* ── SECTIONS ───────────────────────────── */
+    section{padding:82px 5%;}
+    .stag{display:inline-block;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);color:var(--amber-dim);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 13px;border-radius:20px;margin-bottom:13px;}
+    .stitle{font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,40px);font-weight:800;color:var(--text);line-height:1.15;letter-spacing:-.8px;margin-bottom:13px;}
+    .ssub{font-size:15px;color:var(--muted);line-height:1.75;max-width:480px;}
+
+    /* ── FEATURES ───────────────────────────── */
+    #features{background:var(--surface);}
+    .fh{text-align:center;margin-bottom:52px;}
+    .fh .ssub{margin:0 auto;}
+    .fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;}
+    .fc{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:28px 24px;transition:transform .25s,box-shadow .25s,border-color .25s;position:relative;overflow:hidden;}
+    .fc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad-a);opacity:0;transition:opacity .25s;}
+    .fc:hover{transform:translateY(-5px);box-shadow:var(--sh);border-color:rgba(245,166,35,.3);}
+    .fc:hover::before{opacity:1;}
+    .ficon{width:48px;height:48px;background:var(--grad);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px;box-shadow:0 5px 14px rgba(11,22,40,.18);}
+    .fc h3{font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:7px;}
+    .fc p{font-size:13px;color:var(--muted);line-height:1.7;}
+
+    /* ── HOW ────────────────────────────────── */
+    #how{background:var(--navy);}
+    .howh{text-align:center;margin-bottom:52px;}
+    .howh .stag{background:rgba(245,166,35,.1);color:var(--amber);}
+    .howh .stitle{color:#fff;}
+    .howh .ssub{color:rgba(255,255,255,.4);margin:0 auto;}
+    .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:22px;}
+    .step{text-align:center;padding:32px 20px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.03);transition:border-color .25s,transform .25s;}
+    .step:hover{border-color:rgba(245,166,35,.3);transform:translateY(-4px);}
+    .sn{font-family:'Playfair Display',serif;font-size:44px;font-weight:900;color:rgba(245,166,35,.1);line-height:1;margin-bottom:12px;}
+    .si{font-size:28px;margin-bottom:12px;display:block;}
+    .step h3{font-size:14.5px;font-weight:700;color:#fff;margin-bottom:9px;}
+    .step p{font-size:12.5px;color:rgba(255,255,255,.36);line-height:1.65;}
+
+    /* ── TOPICS ─────────────────────────────── */
+    #topics{background:var(--bg);}
+    .tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:13px;margin-top:38px;}
+    .tb{display:flex;align-items:center;gap:11px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s;font-family:inherit;text-align:left;}
+    .tb:hover{transform:translateY(-3px);box-shadow:var(--sh);border-color:var(--amber);}
+    .ti{width:36px;height:36px;background:var(--grad);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+    .tt{font-size:13px;font-weight:600;color:var(--text);}
+    .ts{font-size:11px;color:var(--muted);margin-top:1px;}
+
+    /* ── FOOTER ─────────────────────────────── */
+    footer{background:var(--navy);padding:52px 5% 26px;}
+    .ft{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:26px;}
+    @media(max-width:760px){.ft{grid-template-columns:1fr 1fr;}}
+    .fb p{font-size:12px;color:rgba(255,255,255,.36);line-height:1.7;margin-top:11px;max-width:240px;}
+    .fcol h4{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);margin-bottom:14px;}
+    .fcol a,.fcol button{display:block;font-size:12px;color:rgba(255,255,255,.4);text-decoration:none;margin-bottom:8px;transition:color .2s;background:none;border:none;cursor:pointer;font-family:inherit;text-align:left;padding:0;}
+    .fcol a:hover,.fcol button:hover{color:#fff;}
+    .fbot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+    .fbot p{font-size:11px;color:rgba(255,255,255,.26);}
+    .hl{color:var(--amber);}
+
+    /* ═══════════════════════════════════════════
+       CHAT FAB + POPUP
+    ═══════════════════════════════════════════ */
+    #chatFab{
+      position:fixed;bottom:24px;right:24px;
+      width:58px;height:58px;
+      background:var(--grad-a);border:none;
+      border-radius:16px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:24px;cursor:pointer;
+      box-shadow:0 8px 26px rgba(245,166,35,.45);
+      z-index:1000;
+      transition:transform .3s,box-shadow .25s,border-radius .3s;
+    }
+    #chatFab:hover{transform:scale(1.1);box-shadow:0 14px 34px rgba(245,166,35,.55);}
+    #chatFab.open{border-radius:50%;transform:rotate(180deg) scale(1);}
+    .fab-ring{position:absolute;inset:-4px;border-radius:20px;border:2px solid rgba(245,166,35,.35);animation:ring 2s infinite;}
+    @keyframes ring{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:0;transform:scale(1.18);}}
+    #chatFab.open .fab-ring{display:none;}
+    .fab-n{position:absolute;top:-5px;right:-5px;width:17px;height:17px;background:#ef4444;border-radius:50%;border:2px solid var(--bg);font-size:9px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;}
+    #chatFab.open .fab-n{display:none;}
+
+    #overlay{position:fixed;inset:0;background:rgba(11,22,40,.45);backdrop-filter:blur(3px);z-index:1001;opacity:0;pointer-events:none;transition:opacity .3s;}
+    #overlay.on{opacity:1;pointer-events:all;}
+
+    /* Panel */
+    #chatPanel{
+      position:fixed;
+      bottom:98px;right:24px;
+      width:min(400px, calc(100vw - 48px));
+      height:min(600px, calc(100vh - 120px));
+      background:var(--surface);
+      border-radius:20px;
+      box-shadow:var(--sh-xl);
+      display:flex;flex-direction:column;
+      overflow:hidden;z-index:1002;
+      transform:scale(.88) translateY(24px);
+      opacity:0;pointer-events:none;
+      transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .25s;
+      transform-origin:bottom right;
+      border:1px solid var(--border);
+    }
+    #chatPanel.on{transform:scale(1) translateY(0);opacity:1;pointer-events:all;}
+    @media(max-width:520px){
+      #chatPanel{bottom:0;right:0;left:0;width:100%;height:min(92vh,600px);border-radius:20px 20px 0 0;transform-origin:bottom center;}
+      #chatFab{bottom:16px;right:16px;}
+    }
+
+    /* Panel header */
+    .ph{background:var(--grad);padding:14px 16px;display:flex;align-items:center;gap:11px;flex-shrink:0;}
+    .pav{width:38px;height:38px;background:var(--grad-a);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;position:relative;flex-shrink:0;}
+    .ponline{width:9px;height:9px;background:#22c55e;border-radius:50%;border:2px solid #0b1628;position:absolute;bottom:-2px;right:-2px;animation:pg 2s infinite;}
+    @keyframes pg{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.4);}50%{box-shadow:0 0 0 5px rgba(34,197,94,0);}}
+    .pi h4{font-size:13.5px;font-weight:700;color:#fff;}
+    .pi p{font-size:11px;color:rgba(255,255,255,.42);}
+    .pacts{margin-left:auto;display:flex;gap:6px;}
+    .pab{width:28px;height:28px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;transition:background .2s;color:rgba(255,255,255,.55);}
+    .pab:hover{background:rgba(255,255,255,.18);color:#fff;}
+    .pcls{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:7px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;color:rgba(255,255,255,.65);margin-left:3px;transition:background .2s;}
+    .pcls:hover{background:rgba(239,68,68,.3);color:#fff;border-color:rgba(239,68,68,.35);}
+
+    /* Tabs */
+    .ptabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+    .ptab{flex:1;padding:9px;font-size:12px;font-weight:600;color:var(--muted);background:none;border:none;cursor:pointer;font-family:inherit;transition:color .2s,border-color .2s;border-bottom:2px solid transparent;margin-bottom:-1px;}
+    .ptab.active{color:var(--text);border-bottom-color:var(--amber);}
+
+    /* Panes */
+    #paneChat{display:none;flex-direction:column;flex:1;overflow:hidden;}
+    #paneChat.show{display:flex;}
+    #paneHist{display:none;flex-direction:column;flex:1;overflow:hidden;}
+    #paneHist.show{display:flex;}
+
+    /* Messages */
+    .msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:11px;scroll-behavior:smooth;}
+    .msgs::-webkit-scrollbar{width:3px;}
+    .msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+
+    .wbub{background:var(--grad);border-radius:13px;border-top-left-radius:3px;padding:12px 14px;font-size:12.5px;line-height:1.65;color:rgba(255,255,255,.88);animation:fu .4s ease both;}
+    .wbub strong{color:var(--amber);}
+    .qcs{display:flex;flex-wrap:wrap;gap:6px;}
+    .qc{padding:5px 11px;background:var(--surface);border:1.5px solid var(--border);border-radius:13px;font-size:11px;font-weight:600;color:var(--text);cursor:pointer;transition:all .2s;font-family:inherit;}
+    .qc:hover{border-color:var(--amber);background:rgba(245,166,35,.08);color:var(--amber-dim);}
+
+    .mr{display:flex;gap:7px;animation:fu .3s ease both;}
+    .mr.ur{flex-direction:row-reverse;}
+    .mav{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;align-self:flex-end;}
+    .mav.b{background:var(--grad);}
+    .mav.u{background:var(--grad-a);}
+    .mc{display:flex;flex-direction:column;gap:2px;max-width:78%;}
+    .mc.ur{align-items:flex-end;}
+    .bb{padding:9px 12px;border-radius:12px;font-size:12.5px;line-height:1.65;}
+    .bb.b{background:var(--bub-bot-bg);border:1px solid var(--bub-bot-border);border-top-left-radius:3px;color:var(--bub-bot-text);}
+    .bb.u{background:var(--bub-user-bg);border-top-right-radius:3px;color:var(--bub-user-text);}
+    .bb strong{font-weight:700;color:var(--navy-soft);}
+    [data-theme="dark"] .bb.b strong{color:#93c5fd;}
+    .bb.u strong{color:var(--amber);}
+    .bb.inv{background:#fff5f5;border-color:#fecaca;color:#991b1b;}
+    [data-theme="dark"] .bb.inv{background:#2d1515;border-color:#7f1d1d;color:#fca5a5;}
+    .bb.inv strong{color:#991b1b;}
+    .mt{font-size:9.5px;color:var(--muted);}
+
+    /* ── TYPING ANIMATION ───────────────────── */
+    .ty-wrap{
+      display:none;
+      gap:7px;
+      padding:0 14px 10px;
+      align-items:center;
+      flex-shrink:0;
+    }
+    .ty-wrap.show{display:flex;}
+    .ty-label{
+      background:var(--bub-bot-bg);
+      border:1px solid var(--bub-bot-border);
+      border-radius:12px;border-top-left-radius:3px;
+      padding:9px 14px;
+      display:flex;align-items:center;gap:8px;
+    }
+    .ty-text{
+      font-size:11.5px;color:var(--muted);
+      font-style:italic;
+      animation:fadeInOut 1.2s ease infinite;
+    }
+    @keyframes fadeInOut{0%,100%{opacity:.5;}50%{opacity:1;}}
+    .ty-dots{display:flex;gap:4px;align-items:center;}
+    .ty-dots span{
+      width:5px;height:5px;
+      background:var(--amber);
+      border-radius:50%;
+      animation:bounce 1.2s infinite;
+    }
+    .ty-dots span:nth-child(2){animation-delay:.2s;}
+    .ty-dots span:nth-child(3){animation-delay:.4s;}
+    @keyframes bounce{0%,100%{transform:translateY(0);opacity:.4;}50%{transform:translateY(-5px);opacity:1;}}
+
+    /* Input */
+    .pinp{padding:10px 12px;border-top:1px solid var(--border);flex-shrink:0;background:var(--surface);}
+    .ir{display:flex;gap:7px;align-items:center;}
+    .iw{flex:1;background:var(--inp-bg);border:1.5px solid var(--border);border-radius:10px;display:flex;align-items:center;padding:3px 3px 3px 12px;transition:border-color .2s,box-shadow .2s;}
+    .iw:focus-within{border-color:var(--amber);box-shadow:0 0 0 3px rgba(245,166,35,.12);}
+    #chatInput{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;padding:7px 0;}
+    #chatInput::placeholder{color:var(--muted);}
+    .sb{width:34px;height:34px;background:var(--grad-a);border:none;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:transform .2s;flex-shrink:0;}
+    .sb:hover{transform:scale(1.1);}
+    .ih{font-size:10px;color:var(--muted);text-align:center;margin-top:6px;}
+
+    /* History pane */
+    .hist-list{flex:1;overflow-y:auto;padding:12px;}
+    .hist-empty{text-align:center;color:var(--muted);font-size:13px;padding:40px 20px;}
+    .hist-msg{padding:8px 10px;border-radius:8px;margin-bottom:6px;font-size:12px;line-height:1.55;}
+    .hist-msg.u{background:var(--surface2);border-left:3px solid var(--navy-soft);}
+    .hist-msg.b{background:rgba(245,166,35,.06);border-left:3px solid var(--amber);}
+    .hist-role{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+    .hist-msg.u .hist-role{color:var(--navy-soft);}
+    [data-theme="dark"] .hist-msg.u .hist-role{color:#93c5fd;}
+    .hist-msg.b .hist-role{color:var(--amber-dim);}
+    .hist-text{color:var(--text);}
+    .hist-time{font-size:9.5px;color:var(--muted);margin-top:3px;}
+
+    /* Scroll-reveal */
+    .rv{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease;}
+    .rv.in{opacity:1;transform:translateY(0);}
+
+    /* Dark mode transitions */
+    .fc,.tb,.pinp,.ptabs,.ptab,.msgs,.hist-list,.hist-msg{transition:background .3s,border-color .3s,color .3s;}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nl" href="#"><div class="ni">🎓</div><span class="nt">Acad<span>Bot</span></span></a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#topics">Topics</a></li>
+    <li><a href="/analytics">📊 Analytics</a></li>
+    <li><button id="dmToggle" title="Toggle dark mode" onclick="toggleDark()">🌙</button></li>
+    <li><button class="ncta" onclick="openChat()">💬 Ask AcadBot</button></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="orb orb-1"></div><div class="orb orb-2"></div>
+  <div class="hi">
+    <div class="hc">
+      <div class="hbadge"><div class="dot"></div><span>Powered by AI · KES' Shroff College</span></div>
+      <h1>Your Smart<br/><em>Academic</em><br/>Assistant</h1>
+      <p class="hero-sub">AcadBot answers all academic queries instantly — subject details, exam dates, attendance rules, project guidelines, and more. Available 24/7.</p>
+      <div class="hacts">
+        <button class="btn-p" onclick="openChat()">💬 Start Chatting</button>
+        <a href="#features" class="btn-o">✨ See Features</a>
+      </div>
+    </div>
+    <div class="hstats">
+      <div class="sc"><div class="num">15+</div><div class="lbl">Topic Intents</div></div>
+      <div class="sc"><div class="num">22</div><div class="lbl">Credits / Sem</div></div>
+      <div class="sc"><div class="num">24/7</div><div class="lbl">Always Online</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="fh">
+    <div class="stag">What AcadBot Can Do</div>
+    <h2 class="stitle">Everything you need,<br/>instantly answered</h2>
+    <p class="ssub">No more waiting for office hours. Ask anything and get accurate, focused responses right away.</p>
+  </div>
+  <div class="fg">
+    <div class="fc rv"><div class="ficon">📚</div><h3>Subject Details</h3><p>Ask about any Sem V or VI subject — course code, credits, unit breakdowns, and practicals as per NEP 2025–26.</p></div>
+    <div class="fc rv"><div class="ficon">📅</div><h3>Exam Schedules</h3><p>Exact exam dates from the official Academic Calendar — unit tests, semester exams, ATKT, and result dates.</p></div>
+    <div class="fc rv"><div class="ficon">🎯</div><h3>Attendance Rules</h3><p>Know your 75% minimum attendance requirement, medical leave policy, and impact on internal marks.</p></div>
+    <div class="fc rv"><div class="ficon">💻</div><h3>Project & OJT</h3><p>Field Project (Sem V) and On Job Training (Sem VI) — timelines, marks distribution, and evaluation rubrics.</p></div>
+    <div class="fc rv"><div class="ficon">🌙</div><h3>Dark Mode</h3><p>Toggle between light and dark themes anytime — your preference is saved automatically for every visit.</p></div>
+    <div class="fc rv"><div class="ficon">📊</div><h3>Analytics Dashboard</h3><p>Real-time NLP accuracy, intent distribution, unique users, most-asked questions, and daily activity charts.</p></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="howh">
+    <div class="stag">How It Works</div>
+    <h2 class="stitle">Built smart, responds fast</h2>
+    <p class="ssub">Fuzzy matching + synonym expansion + phrase-priority NLP — accurate even with typos.</p>
+  </div>
+  <div class="sg">
+    <div class="step rv"><div class="sn">01</div><span class="si">💬</span><h3>Type Your Question</h3><p>Even with typos — "intrnet of thigns", "attendnce rule", "examm dates" — fuzzy matching handles it.</p></div>
+    <div class="step rv"><div class="sn">02</div><span class="si">🔄</span><h3>Synonym Expansion</h3><p>"courses" → "subjects", "bunk" → "attendance", "react" → "MERN stack" — 60+ synonym mappings.</p></div>
+    <div class="step rv"><div class="sn">03</div><span class="si">🧠</span><h3>Phrase-Priority NLP</h3><p>200+ phrases scored — longer matches rank 10× higher. Fuzzy phrase matching at 85% threshold.</p></div>
+    <div class="step rv"><div class="sn">04</div><span class="si">⚡</span><h3>Focused Accurate Reply</h3><p>Only what you asked — exact dates, marks, units, and subject details from official sources.</p></div>
+  </div>
+</section>
+
+<!-- TOPICS -->
+<section id="topics">
+  <div class="stag">Try Asking About</div>
+  <h2 class="stitle">Popular Topics</h2>
+  <p class="ssub">Click any topic to instantly ask AcadBot. Or try typing with a typo — fuzzy matching will still get it right!</p>
+  <div class="tg">
+    <button class="tb rv" onclick="askT('What are Sem 6 subjects?')"><div class="ti">📚</div><div><div class="tt">Sem 6 Subjects</div><div class="ts">All Semester VI courses</div></div></button>
+    <button class="tb rv" onclick="askT('What are Sem 5 subjects?')"><div class="ti">📖</div><div><div class="tt">Sem 5 Subjects</div><div class="ts">All Semester V courses</div></div></button>
+    <button class="tb rv" onclick="askT('Tell me about IoT subject')"><div class="ti">🔌</div><div><div class="tt">IoT Subject</div><div class="ts">Units, practicals & credits</div></div></button>
+    <button class="tb rv" onclick="askT('Tell me about MERN stack')"><div class="ti">🌐</div><div><div class="tt">MERN Stack</div><div class="ts">Full-stack development</div></div></button>
+    <button class="tb rv" onclick="askT('Tell me about Network Security')"><div class="ti">🔐</div><div><div class="tt">Network Security</div><div class="ts">25UBIT501 details</div></div></button>
+    <button class="tb rv" onclick="askT('Tell me about Blockchain subject')"><div class="ti">⛓️</div><div><div class="tt">Blockchain</div><div class="ts">Smart contracts & dApps</div></div></button>
+    <button class="tb rv" onclick="askT('When are the exam dates?')"><div class="ti">📅</div><div><div class="tt">Exam Dates</div><div class="ts">Official 2025–26 schedule</div></div></button>
+    <button class="tb rv" onclick="askT('What is the attendance rule?')"><div class="ti">🎯</div><div><div class="tt">Attendance Rules</div><div class="ts">75% policy & guidelines</div></div></button>
+    <button class="tb rv" onclick="askT('Tell me about project guidelines')"><div class="ti">💻</div><div><div class="tt">Project & OJT</div><div class="ts">Submission & marks</div></div></button>
+    <button class="tb rv" onclick="askT('Show me the academic calendar')"><div class="ti">🗓️</div><div><div class="tt">Academic Calendar</div><div class="ts">All important dates</div></div></button>
+    <button class="tb rv" onclick="askT('What are the holiday dates?')"><div class="ti">🪔</div><div><div class="tt">Holidays</div><div class="ts">Diwali, Ganapati & more</div></div></button>
+    <button class="tb rv" onclick="askT('What are internal marks breakdown?')"><div class="ti">📊</div><div><div class="tt">Internal Marks</div><div class="ts">Assessment breakdown</div></div></button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft">
+    <div class="fb">
+      <a class="nl" href="#" style="text-decoration:none"><div class="ni">🎓</div><span class="nt">Acad<span>Bot</span></span></a>
+      <p>AI-powered academic support chatbot for B.Sc. IT (TY) students at KES' Shroff College, Kandivali (W), Mumbai – 67.</p>
+    </div>
+    <div class="fcol">
+      <h4>Navigate</h4>
+      <a href="#features">Features</a>
+      <a href="#how">How It Works</a>
+      <a href="#topics">Topics</a>
+      <a href="/analytics">📊 Analytics</a>
+    </div>
+    <div class="fcol">
+      <h4>Sem VI</h4>
+      <button onclick="askT('Tell me about MERN stack')">MERN Stack</button>
+      <button onclick="askT('Tell me about IoT subject')">IoT</button>
+      <button onclick="askT('Tell me about Blockchain subject')">Blockchain</button>
+      <button onclick="askT('Tell me about Software Testing')">Software Testing</button>
+    </div>
+    <div class="fcol">
+      <h4>Quick Info</h4>
+      <button onclick="askT('When are the exam dates?')">Exam Dates</button>
+      <button onclick="askT('What is the attendance rule?')">Attendance</button>
+      <button onclick="askT('Tell me about project guidelines')">Project Guide</button>
+      <button onclick="askT('What are the holiday dates?')">Holidays</button>
+    </div>
+  </div>
+  <div class="fbot">
+    <p>© 2025 AcadBot · KES' Shroff College, Kandivali (W), Mumbai – 67</p>
+    <p>TY B.Sc. IT Project 2025–26 · Built with <span class="hl">♥</span> using Python Flask</p>
+  </div>
+</footer>
+
+<!-- FAB -->
+<button id="chatFab" onclick="toggleChat()">
+  <div class="fab-ring"></div>
+  <span id="fabIcon">🤖</span>
+  <div class="fab-n">1</div>
+</button>
+
+<!-- OVERLAY -->
+<div id="overlay" onclick="closeChat()"></div>
+
+<!-- CHAT PANEL -->
+<div id="chatPanel">
+  <div class="ph">
+    <div class="pav">🤖<div class="ponline"></div></div>
+    <div class="pi"><h4>AcadBot</h4><p id="botStatus">Online · B.Sc. IT (TY) 2025–26</p></div>
+    <div class="pacts">
+      <button class="pab" title="Clear chat" onclick="clearChat()">🗑️</button>
+      <button class="pab" title="Export chat" onclick="exportChat()">💾</button>
+      <button class="pcls" title="Close" onclick="closeChat()">✕</button>
+    </div>
+  </div>
+
+  <div class="ptabs">
+    <button class="ptab active" id="tabChat" onclick="switchTab('chat')">💬 Chat</button>
+    <button class="ptab" id="tabHist" onclick="switchTab('hist')">🕐 History</button>
+  </div>
+
+  <!-- Chat pane -->
+  <div id="paneChat" class="show">
+    <div class="msgs" id="msgs">
+      <div class="wbub">
+        👋 Hello! I'm <strong>AcadBot</strong> — your AI academic assistant for <strong>B.Sc. IT (TY)</strong>.<br/><br/>
+        Ask me about subjects, exams, attendance, holidays, or project guidelines!
+      </div>
+      <div class="qcs">
+        <button class="qc" onclick="sendQ('What are Sem 6 subjects?')">📚 Sem 6</button>
+        <button class="qc" onclick="sendQ('When are the exams?')">📅 Exams</button>
+        <button class="qc" onclick="sendQ('Attendance rule')">🎯 Attendance</button>
+        <button class="qc" onclick="sendQ('Tell me about IoT subject')">🔌 IoT</button>
+        <button class="qc" onclick="sendQ('Tell me about MERN stack')">🌐 MERN</button>
+      </div>
+    </div>
+
+    <!-- Typing indicator — outside scroll div, always visible -->
+    <div class="ty-wrap" id="tyWrap">
+      <div class="mav b">🤖</div>
+      <div class="ty-label">
+        <div class="ty-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <span class="ty-text">Bot is typing…</span>
+      </div>
+    </div>
+
+    <div class="pinp">
+      <div class="ir">
+        <div class="iw"><input id="chatInput" type="text" placeholder="Ask about subjects, exams, fees…" autocomplete="off"/></div>
+        <button class="sb" onclick="sendMessage()">➤</button>
+      </div>
+      <p class="ih">Press <kbd style="background:var(--border);border-radius:3px;padding:1px 5px;font-size:9px">Enter</kbd> to send · Fuzzy NLP + Synonyms</p>
+    </div>
+  </div>
+
+  <!-- History pane -->
+  <div id="paneHist">
+    <div class="hist-list" id="histList">
+      <div class="hist-empty">No chat history yet.<br/>Start a conversation! 💬</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── DARK MODE ── */
+  const dm = localStorage.getItem('acadbot-theme') || 'light';
+  applyTheme(dm);
+
+  function applyTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    document.getElementById('dmToggle').textContent = t === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('acadbot-theme', t);
+  }
+  function toggleDark(){
+    const cur = document.documentElement.getAttribute('data-theme');
+    applyTheme(cur === 'dark' ? 'light' : 'dark');
+  }
+
+  /* ── CHAT OPEN / CLOSE ── */
+  let isOpen = false;
+  function openChat(){
+    isOpen = true;
+    document.getElementById('chatPanel').classList.add('on');
+    document.getElementById('overlay').classList.add('on');
+    document.getElementById('chatFab').classList.add('open');
+    document.getElementById('fabIcon').textContent = '✕';
+    setTimeout(()=> document.getElementById('chatInput').focus(), 320);
+  }
+  function closeChat(){
+    isOpen = false;
+    document.getElementById('chatPanel').classList.remove('on');
+    document.getElementById('overlay').classList.remove('on');
+    document.getElementById('chatFab').classList.remove('open');
+    document.getElementById('fabIcon').textContent = '🤖';
+  }
+  function toggleChat(){ isOpen ? closeChat() : openChat(); }
+
+  /* ── TABS ── */
+  function switchTab(t){
+    document.getElementById('tabChat').classList.toggle('active', t==='chat');
+    document.getElementById('tabHist').classList.toggle('active', t==='hist');
+    document.getElementById('paneChat').classList.toggle('show', t==='chat');
+    document.getElementById('paneHist').classList.toggle('show', t==='hist');
+    if(t==='hist') loadHistory();
+  }
+
+  /* ── RENDER PLAIN TEXT (no markdown stars) ── */
+  function renderText(t){
+    return t
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\n/g,'<br>');
+  }
+  function ts(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
+
+  /* ── TYPING INDICATOR ── */
+  function showTyping(){
+    const tw = document.getElementById('tyWrap');
+    const st = document.getElementById('botStatus');
+    tw.classList.add('show');
+    st.textContent = 'Typing…';
+    st.style.color = 'rgba(245,166,35,.8)';
+  }
+  function hideTyping(){
+    const tw = document.getElementById('tyWrap');
+    const st = document.getElementById('botStatus');
+    tw.classList.remove('show');
+    st.textContent = 'Online · B.Sc. IT (TY) 2025–26';
+    st.style.color = '';
+  }
+
+  /* ── ADD MESSAGE ── */
+  function addMsg(role, text, intent, source){
+    const div = document.getElementById('msgs');
+    const row = document.createElement('div');
+    row.className = `mr${role==='user'?' ur':''}`;
+
+    const av = document.createElement('div');
+    av.className = `mav ${role==='user'?'u':'b'}`;
+    av.textContent = role==='user'?'🧑‍🎓':'🤖';
+
+    const col = document.createElement('div');
+    col.className = `mc${role==='user'?' ur':''}`;
+
+    const bub = document.createElement('div');
+    bub.className = `bb ${role==='user'?'u':'b'}${intent==='invalid'?' inv':''}`;
+    bub.innerHTML = renderText(text);
+
+    const meta = document.createElement('div');
+    meta.style.cssText='display:flex;align-items:center;gap:5px;flex-wrap:wrap;';
+    const t2 = document.createElement('span');
+    t2.className='mt'; t2.textContent=ts();
+    meta.appendChild(t2);
+
+    if(role==='bot'){
+      if(source==='gemini'){
+        // Gemini badge with gradient text
+        const gem=document.createElement('span');
+        gem.style.cssText='font-size:9.5px;font-weight:700;background:linear-gradient(90deg,#4285f4,#ea4335,#fbbc05,#34a853);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;';
+        gem.textContent='✦ Gemini AI';
+        meta.appendChild(gem);
+      } else if(intent && intent!=='unknown' && intent!=='invalid'){
+        const tag=document.createElement('span');
+        tag.style.cssText='font-size:9.5px;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.25);color:#c4821a;border-radius:6px;padding:1px 6px;font-weight:600;';
+        tag.textContent='#'+intent.replace(/_/g,' ');
+        meta.appendChild(tag);
+      }
+    }
+
+    col.appendChild(bub); col.appendChild(meta);
+    row.appendChild(av); row.appendChild(col);
+    div.appendChild(row);
+    div.scrollTop = div.scrollHeight;
+  }
+
+  /* ── SEND MESSAGE ── */
+  async function sendMessage(){
+    const inp = document.getElementById('chatInput');
+    const msg = inp.value.trim();
+    if(!msg) return;
+    inp.value = '';
+    addMsg('user', msg, null, null);
+
+    showTyping();
+    document.getElementById('msgs').scrollTop = 99999;
+
+    try {
+      const r = await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg})});
+      const d = await r.json();
+      hideTyping();
+      addMsg('bot', d.reply, d.intent, d.source);
+    } catch(e){
+      hideTyping();
+      addMsg('bot','Connection error. Ensure Flask runs on port 5000.','error','predefined');
+    }
+  }
+
+  function sendQ(t){ if(!isOpen) openChat(); document.getElementById('chatInput').value=t; sendMessage(); }
+  function askT(t){ openChat(); setTimeout(()=>{ document.getElementById('chatInput').value=t; sendMessage(); },300); }
+
+  /* ── HISTORY TAB ── */
+  async function loadHistory(){
+    const r = await fetch('/history');
+    const d = await r.json();
+    const el = document.getElementById('histList');
+    if(!d.history || d.history.length===0){
+      el.innerHTML='<div class="hist-empty">No chat history yet.<br/>Start a conversation! 💬</div>';
+      return;
+    }
+    el.innerHTML='';
+    d.history.forEach(e=>{
+      const div=document.createElement('div');
+      div.className=`hist-msg ${e.role==='user'?'u':'b'}`;
+      const srcBadge = (e.source==='gemini')
+        ? '<span style="font-size:9px;font-weight:700;color:#4285f4;margin-left:4px;">✦ Gemini</span>'
+        : '';
+      div.innerHTML=`<div class="hist-role">${e.role==='user'?'You':'AcadBot'}${srcBadge}</div>`+
+                    `<div class="hist-text">${renderText(e.message)}</div>`+
+                    `<div class="hist-time">${e.time||''}</div>`;
+      el.appendChild(div);
+    });
+    el.scrollTop=el.scrollHeight;
+  }
+
+  async function clearChat(){
+    await fetch('/clear',{method:'POST'});
+    document.getElementById('msgs').innerHTML=
+      '<div class="wbub" style="animation:fu .4s ease both">🗑️ Chat cleared! Ask me anything.</div>';
+  }
+
+  async function exportChat(){
+    const r=await fetch('/history');
+    const d=await r.json();
+    const txt=d.history.map(e=>`[${e.time}] ${e.role.toUpperCase()}: ${e.message}`).join('\n');
+    const blob=new Blob([txt],{type:'text/plain'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download='acadbot_chat.txt'; a.click();
+  }
+
+  /* ── KEYBOARD ── */
+  document.getElementById('chatInput').addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}
+  });
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&isOpen) closeChat();});
+
+  /* ── NAVBAR ── */
+  window.addEventListener('scroll',()=>{
+    document.getElementById('nav').classList.toggle('scrolled',window.scrollY>20);
+  });
+
+  /* ── SCROLL REVEAL ── */
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting) e.target.classList.add('in');}),{threshold:.1});
+  document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
