@@ -790,7 +790,7 @@ def get_intent(user_input):
     return best_intent if best_score > 0 else None
 
 # ── Gemini API ────────────────────────────────────────────────────────
-GEMINI_API_KEY = "AIzaSyDpVOJ1CBwbc1ynsGskpHIeshUK8D6t8uE"
+GEMINI_API_KEY = ""
 GEMINI_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/"
     "gemini-2.0-flash:generateContent?key=" + GEMINI_API_KEY
