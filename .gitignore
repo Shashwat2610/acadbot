@@ -1,8 +1,16 @@
 __pycache__/
 *.pyc
+<<<<<<< HEAD
 *.pyo
+=======
+>>>>>>> f763b2e (Refactor: clean structure with separate CSS and JS modules)
 data/
 *.json
 .env
 venv/
+<<<<<<< HEAD
 .venv/
+=======
+.venv
+
+>>>>>>> f763b2e (Refactor: clean structure with separate CSS and JS modules)

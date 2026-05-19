@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
+<<<<<<< HEAD
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AcadBot – AI Academic Assistant | KES' Shroff College</title>
@@ -332,11 +333,37 @@
 <!-- NAV -->
 <nav id="nav">
   <a class="nl" href="#"><div class="ni">🎓</div><span class="nt">Acad<span>Bot</span></span></a>
+=======
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KES AcadBot – AI Assistant for All Courses | KES Shroff College</title>
+
+  <!-- Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+</head>
+<body>
+
+<!-- ══ NAVBAR ═══════════════════════════════════════════════════════════════ -->
+<nav id="nav">
+  <a class="nav-logo" href="#">
+    <div class="nav-icon">🎓</div>
+    <span class="nav-title">KES <span>AcadBot</span></span>
+  </a>
+
+>>>>>>> f763b2e (Refactor: clean structure with separate CSS and JS modules)
   <ul class="nav-links">
     <li><a href="#features">Features</a></li>
     <li><a href="#how">How It Works</a></li>
     <li><a href="#topics">Topics</a></li>
     <li><a href="/analytics">📊 Analytics</a></li>
+<<<<<<< HEAD
     <li><button id="dmToggle" title="Toggle dark mode" onclick="toggleDark()">🌙</button></li>
     <li><button class="ncta" onclick="openChat()">💬 Ask AcadBot</button></li>
   </ul>
@@ -359,10 +386,60 @@
       <div class="sc"><div class="num">15+</div><div class="lbl">Topic Intents</div></div>
       <div class="sc"><div class="num">22</div><div class="lbl">Credits / Sem</div></div>
       <div class="sc"><div class="num">24/7</div><div class="lbl">Always Online</div></div>
+=======
+    <li>
+      <button class="btn-theme" id="themeToggle" title="Toggle dark mode" onclick="toggleTheme()">🌙</button>
+    </li>
+    <li>
+      <button class="btn-nav-cta" onclick="openChat()">💬 Ask AcadBot</button>
+    </li>
+  </ul>
+</nav>
+
+<!-- ══ HERO ═════════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="badge-dot"></div>
+        <span>Official AI Assistant · kessc.edu.in</span>
+      </div>
+
+      <h1>Your Smart<br /><em>Academic</em><br />Assistant</h1>
+
+      <p class="hero-sub">
+        KES AcadBot answers questions about ALL college courses — B.Sc. IT, BCA, B.Com, BMS, BAF,
+        M.Com and more. Powered by Gemini AI with full college knowledge. Available 24/7.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="openChat()">💬 Start Chatting</button>
+        <a href="#features" class="btn-outline">✨ See Features</a>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="num">15+</div>
+        <div class="lbl">Topic Intents</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">22</div>
+        <div class="lbl">Credits / Sem</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">24/7</div>
+        <div class="lbl">Always Online</div>
+      </div>
+>>>>>>> f763b2e (Refactor: clean structure with separate CSS and JS modules)
     </div>
   </div>
 </section>
 
+<<<<<<< HEAD
 <!-- FEATURES -->
 <section id="features">
   <div class="fh">
@@ -424,12 +501,163 @@
       <p>AI-powered academic support chatbot for B.Sc. IT (TY) students at KES' Shroff College, Kandivali (W), Mumbai – 67.</p>
     </div>
     <div class="fcol">
+=======
+<!-- ══ FEATURES ══════════════════════════════════════════════════════════════ -->
+<section id="features">
+  <div class="features-header">
+    <div class="section-tag">What AcadBot Can Do</div>
+    <h2 class="section-title">Everything you need,<br />instantly answered</h2>
+    <p class="section-sub">No more waiting for office hours. Ask anything and get accurate, focused responses right away.</p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon">📚</div>
+      <h3>Subject Details</h3>
+      <p>Ask about any Sem V or VI subject — course code, credits, unit breakdowns, and practicals as per NEP 2025–26.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">📅</div>
+      <h3>Exam Schedules</h3>
+      <p>Exact exam dates from the official Academic Calendar — unit tests, semester exams, ATKT, and result dates.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">🎯</div>
+      <h3>Attendance Rules</h3>
+      <p>Know your 75% minimum attendance requirement, medical leave policy, and impact on internal marks.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">💻</div>
+      <h3>Project & OJT</h3>
+      <p>Field Project (Sem V) and On Job Training (Sem VI) — timelines, marks distribution, and evaluation rubrics.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">🌙</div>
+      <h3>Dark Mode</h3>
+      <p>Toggle between light and dark themes anytime — your preference is saved automatically for every visit.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">📊</div>
+      <h3>Analytics Dashboard</h3>
+      <p>Real-time NLP accuracy, intent distribution, unique users, most-asked questions, and daily activity charts.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══════════════════════════════════════════════════════════ -->
+<section id="how">
+  <div class="how-header">
+    <div class="section-tag">How It Works</div>
+    <h2 class="section-title">Built smart, responds fast</h2>
+    <p class="section-sub">Fuzzy matching + synonym expansion + phrase-priority NLP — accurate even with typos.</p>
+  </div>
+
+  <div class="steps-grid">
+    <div class="step reveal">
+      <div class="step-number">01</div>
+      <span class="step-icon">💬</span>
+      <h3>Type Your Question</h3>
+      <p>Even with typos — "intrnet of thigns", "attendnce rule", "examm dates" — fuzzy matching handles it.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-number">02</div>
+      <span class="step-icon">🔄</span>
+      <h3>Synonym Expansion</h3>
+      <p>"management" → "bms", "banking" → "bbi", "accountancy" → "baf" — 60+ mappings.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-number">03</div>
+      <span class="step-icon">🧠</span>
+      <h3>Phrase-Priority NLP</h3>
+      <p>200+ phrases scored — longer matches rank 10× higher. Fuzzy phrase matching at 85% threshold.</p>
+    </div>
+    <div class="step reveal">
+      <div class="step-number">04</div>
+      <span class="step-icon">⚡</span>
+      <h3>Focused Accurate Reply</h3>
+      <p>Only what you asked — exact dates, marks, units, and subject details from official sources.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TOPICS ════════════════════════════════════════════════════════════════ -->
+<section id="topics">
+  <div class="section-tag">Try Asking About</div>
+  <h2 class="section-title">Popular Topics</h2>
+  <p class="section-sub">Click any topic to instantly ask AcadBot. Or try typing with a typo — fuzzy matching will still get it right!</p>
+
+  <div class="topics-grid">
+    <button class="topic-btn reveal" onclick="askT('Latest college notices')">
+      <div class="topic-icon">📢</div>
+      <div><div class="topic-name">Latest Notices</div><div class="topic-desc">Announcements & circulars</div></div>
+    </button>
+    <button class="topic-btn reveal" onclick="askT('Admission process and eligibility')">
+      <div class="topic-icon">📝</div>
+      <div><div class="topic-name">Admissions</div><div class="topic-desc">Process, eligibility & dates</div></div>
+    </button>
+    <button class="topic-btn reveal" onclick="askT('BSc IT Sem 6 subjects')">
+      <div class="topic-icon">💻</div>
+      <div><div class="topic-name">B.Sc. IT Subjects</div><div class="topic-desc">Sem V & VI details</div></div>
+    </button>
+    <button class="topic-btn reveal" onclick="askT('Tell me about BCA course')">
+      <div class="topic-icon">🖥️</div>
+      <div><div class="topic-name">BCA Course</div><div class="topic-desc">Computer Applications</div></div>
+    </button>
+    <button class="topic-btn reveal" onclick="askT('Tell me about Network Security')">
+      <div class="topic-icon">🔐</div>
+      <div><div class="topic-name">Network Security</div><div class="topic-desc">25UBIT501 details</div></div>
+    </button>
+    <button class="topic-btn reveal" onclick="askT('Tell me about Blockchain subject')">
+      <div class="topic-icon">⛓️</div>
+      <div><div class="topic-name">Blockchain</div><div class="topic-desc">Smart contracts & dApps</div></div>
+    </button>
+    <button class="topic-btn reveal" onclick="askT('When are the exam dates?')">
+      <div class="topic-icon">📅</div>
+      <div><div class="topic-name">Exam Dates</div><div class="topic-desc">Official 2025–26 schedule</div></div>
+    </button>
+    <button class="topic-btn reveal" onclick="askT('What is the attendance rule?')">
+      <div class="topic-icon">🎯</div>
+      <div><div class="topic-name">Attendance Rules</div><div class="topic-desc">75% policy & guidelines</div></div>
+    </button>
+    <button class="topic-btn reveal" onclick="askT('Tell me about project guidelines')">
+      <div class="topic-icon">💻</div>
+      <div><div class="topic-name">Project & OJT</div><div class="topic-desc">Submission & marks</div></div>
+    </button>
+    <button class="topic-btn reveal" onclick="askT('Show me the academic calendar')">
+      <div class="topic-icon">🗓️</div>
+      <div><div class="topic-name">Academic Calendar</div><div class="topic-desc">All important dates</div></div>
+    </button>
+    <button class="topic-btn reveal" onclick="askT('What are the holiday dates?')">
+      <div class="topic-icon">🪔</div>
+      <div><div class="topic-name">Holidays</div><div class="topic-desc">Diwali, Ganapati & more</div></div>
+    </button>
+    <button class="topic-btn reveal" onclick="askT('What are internal marks breakdown?')">
+      <div class="topic-icon">📊</div>
+      <div><div class="topic-name">Internal Marks</div><div class="topic-desc">Assessment breakdown</div></div>
+    </button>
+  </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="#" style="text-decoration:none">
+        <div class="nav-icon">🎓</div>
+        <span class="nav-title">KES <span>AcadBot</span></span>
+      </a>
+      <p>Official AI assistant for KES' Shroff College — covers ALL courses: B.Sc. IT, BCA, B.Com, BAF, BBI, BFM, BMS, BBA, BMM, BATM, M.Com. Pure knowledge-base — no API.</p>
+    </div>
+
+    <div class="footer-col">
+>>>>>>> f763b2e (Refactor: clean structure with separate CSS and JS modules)
       <h4>Navigate</h4>
       <a href="#features">Features</a>
       <a href="#how">How It Works</a>
       <a href="#topics">Topics</a>
       <a href="/analytics">📊 Analytics</a>
     </div>
+<<<<<<< HEAD
     <div class="fcol">
       <h4>Sem VI</h4>
       <button onclick="askT('Tell me about MERN stack')">MERN Stack</button>
@@ -438,6 +666,18 @@
       <button onclick="askT('Tell me about Software Testing')">Software Testing</button>
     </div>
     <div class="fcol">
+=======
+
+    <div class="footer-col">
+      <h4>Sem VI</h4>
+      <button onclick="askT('Tell me about BMS course')">BMS</button>
+      <button onclick="askT('What are B.Com subjects?')">B.Com</button>
+      <button onclick="askT('Tell me about BAF course')">BAF</button>
+      <button onclick="askT('Tell me about BCA course')">BCA</button>
+    </div>
+
+    <div class="footer-col">
+>>>>>>> f763b2e (Refactor: clean structure with separate CSS and JS modules)
       <h4>Quick Info</h4>
       <button onclick="askT('When are the exam dates?')">Exam Dates</button>
       <button onclick="askT('What is the attendance rule?')">Attendance</button>
@@ -445,6 +685,7 @@
       <button onclick="askT('What are the holiday dates?')">Holidays</button>
     </div>
   </div>
+<<<<<<< HEAD
   <div class="fbot">
     <p>© 2025 AcadBot · KES' Shroff College, Kandivali (W), Mumbai – 67</p>
     <p>TY B.Sc. IT Project 2025–26 · Built with <span class="hl">♥</span> using Python Flask</p>
@@ -476,10 +717,57 @@
   <div class="ptabs">
     <button class="ptab active" id="tabChat" onclick="switchTab('chat')">💬 Chat</button>
     <button class="ptab" id="tabHist" onclick="switchTab('hist')">🕐 History</button>
+=======
+
+  <div class="footer-bottom">
+    <p>© 2025 KES AcadBot · KES' Shroff College, Kandivali (W), Mumbai – 67</p>
+    <p>TY B.Sc. IT Project 2025-26 · Python Flask · Pure KB NLP · All Courses</p>
+  </div>
+</footer>
+
+<!-- ══ FEEDBACK TOAST ════════════════════════════════════════════════════════ -->
+<div id="feedbackToast"></div>
+
+<!-- ══ CHAT FAB ══════════════════════════════════════════════════════════════ -->
+<button id="chatFab" onclick="toggleChat()">
+  <div class="fab-ring"></div>
+  <span id="fabIcon">🤖</span>
+  <div class="fab-badge">1</div>
+</button>
+
+<!-- ══ OVERLAY ══════════════════════════════════════════════════════════════ -->
+<div id="overlay" onclick="closeChat()"></div>
+
+<!-- ══ CHAT PANEL ════════════════════════════════════════════════════════════ -->
+<div id="chatPanel">
+
+  <!-- Header -->
+  <div class="panel-header">
+    <div class="panel-avatar">
+      🤖
+      <div class="avatar-online"></div>
+    </div>
+    <div class="panel-info">
+      <h4>AcadBot</h4>
+      <p id="botStatus">Online · All Courses · kessc.edu.in</p>
+    </div>
+    <div class="panel-actions">
+      <button class="panel-btn" title="Clear chat"  onclick="clearChat()">🗑️</button>
+      <button class="panel-btn" title="Export chat" onclick="exportChat()">💾</button>
+      <button class="panel-btn-close" title="Close" onclick="closeChat()">✕</button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="panel-tabs">
+    <button class="panel-tab active" id="tabChat" onclick="switchTab('chat')">💬 Chat</button>
+    <button class="panel-tab"        id="tabHist" onclick="switchTab('hist')">🕐 History</button>
+>>>>>>> f763b2e (Refactor: clean structure with separate CSS and JS modules)
   </div>
 
   <!-- Chat pane -->
   <div id="paneChat" class="show">
+<<<<<<< HEAD
     <div class="msgs" id="msgs">
       <div class="wbub">
         👋 Hello! I'm <strong>AcadBot</strong> — your AI academic assistant for <strong>B.Sc. IT (TY)</strong>.<br/><br/>
@@ -511,17 +799,68 @@
         <button class="sb" onclick="sendMessage()">➤</button>
       </div>
       <p class="ih">Press <kbd style="background:var(--border);border-radius:3px;padding:1px 5px;font-size:9px">Enter</kbd> to send · Fuzzy NLP + Synonyms</p>
+=======
+    <div class="messages" id="msgs">
+      <div class="welcome-bubble">
+        👋 Hello! I'm <strong>KES AcadBot</strong> — AI assistant for KES' Shroff College, Kandivali.<br /><br />
+        I can answer questions about <strong>all courses</strong>:<br />
+        B.Sc. IT • BCA • B.Com • BAF • BBI • BFM • BMS • BBA • BMM • M.Com<br /><br />
+        Ask me anything — exams, subjects, admission, fees, career guidance!
+      </div>
+
+      <div class="quick-chips">
+        <button class="chip" onclick="sendQ('What are the B.Com subjects?')">📘 B.Com</button>
+        <button class="chip" onclick="sendQ('Tell me about BMS course')">🏛️ BMS</button>
+        <button class="chip" onclick="sendQ('What are Sem 6 BSc IT subjects?')">💻 B.Sc. IT</button>
+        <button class="chip" onclick="sendQ('Admission process for KES college')">📝 Admission</button>
+        <button class="chip" onclick="sendQ('Exam dates')">📅 Exams</button>
+      </div>
+    </div>
+
+    <!-- Typing indicator -->
+    <div class="typing-wrap" id="tyWrap">
+      <div class="msg-avatar bot">🤖</div>
+      <div class="typing-bubble">
+        <div class="typing-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <span class="typing-text">Bot is typing…</span>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="panel-input">
+      <div class="input-row">
+        <div class="input-wrap">
+          <input
+            id="chatInput"
+            type="text"
+            placeholder="Ask about subjects, exams, fees…"
+            autocomplete="off"
+          />
+        </div>
+        <button class="send-btn" onclick="sendMessage()">➤</button>
+      </div>
+      <p class="input-hint">
+        Press <kbd>Enter</kbd> to send · Fuzzy NLP + Synonyms
+      </p>
+>>>>>>> f763b2e (Refactor: clean structure with separate CSS and JS modules)
     </div>
   </div>
 
   <!-- History pane -->
   <div id="paneHist">
     <div class="hist-list" id="histList">
+<<<<<<< HEAD
       <div class="hist-empty">No chat history yet.<br/>Start a conversation! 💬</div>
+=======
+      <div class="hist-empty">No chat history yet.<br />Start a conversation! 💬</div>
+>>>>>>> f763b2e (Refactor: clean structure with separate CSS and JS modules)
     </div>
   </div>
 </div>
 
+<<<<<<< HEAD
 <script>
   /* ── DARK MODE ── */
   const dm = localStorage.getItem('acadbot-theme') || 'light';
@@ -712,5 +1051,9 @@
   const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting) e.target.classList.add('in');}),{threshold:.1});
   document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
 </script>
+=======
+<!-- ══ SCRIPTS ═══════════════════════════════════════════════════════════════ -->
+<script type="module" src="{{ url_for('static', filename='js/index.js') }}"></script>
+>>>>>>> f763b2e (Refactor: clean structure with separate CSS and JS modules)
 </body>
 </html>

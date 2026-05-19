@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
+<<<<<<< HEAD
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AcadBot – Analytics & Evaluation Report</title>
@@ -421,5 +422,64 @@
   // Auto-refresh every 30 seconds
   setInterval(load, 30000);
 </script>
+=======
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AcadBot – Analytics & Evaluation Report</title>
+
+  <!-- Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/analytics.css') }}" />
+</head>
+<body>
+
+<!-- ══ NAVBAR ═══════════════════════════════════════════════════════════════ -->
+<nav>
+  <a class="nav-logo" href="/">
+    <div class="nav-icon">🎓</div>
+    <span class="nav-title">KES <span>AcadBot</span></span>
+  </a>
+
+  <div class="nav-right">
+    <button class="btn-theme" id="themeToggle" title="Toggle dark mode" onclick="toggleTheme()">🌙</button>
+    <a class="nav-back" href="/">← Back to Website</a>
+  </div>
+</nav>
+
+<!-- ══ PAGE ══════════════════════════════════════════════════════════════════ -->
+<div class="page">
+
+  <!-- Header banner -->
+  <div class="page-header">
+    <div class="header-badge">
+      <div class="badge-dot"></div>
+      <span>Live Analytics</span>
+    </div>
+    <h1>📊 Analytics & Evaluation Report</h1>
+    <p>NLP accuracy · Website scraping cache · Intent distribution · Unique users · Most asked questions</p>
+    <button class="refresh-btn" onclick="load()">🔄 Refresh</button>
+  </div>
+
+  <div class="last-updated" id="lastUpdated">Last updated: —</div>
+
+  <!-- Dynamic content injected by analytics.js -->
+  <div id="content">
+    <div class="loading">
+      <div class="spinner"></div>
+      Loading live analytics…
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ SCRIPTS ═══════════════════════════════════════════════════════════════ -->
+<script type="module" src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+>>>>>>> f763b2e (Refactor: clean structure with separate CSS and JS modules)
 </body>
 </html>

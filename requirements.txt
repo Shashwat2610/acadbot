@@ -1,2 +1,6 @@
 flask>=2.3.0
 gunicorn>=21.2.0
+<<<<<<< HEAD
+=======
+beautifulsoup4>=4.12.0
+>>>>>>> f763b2e (Refactor: clean structure with separate CSS and JS modules)
